@@ -1,5 +1,5 @@
 {
-  "name": "console-plugin-template",
+  "name": "helm-plugin-demo",
   "version": "0.0.1",
   "private": true,
   "repository": "git@github.com:spadgett/console-plugin-template.git",
@@ -14,8 +14,10 @@
     "lint": "eslint ./src --fix && stylelint \"src/**/*.css\" --allow-empty-input --fix"
   },
   "devDependencies": {
-    "@openshift-console/dynamic-plugin-sdk": "0.0.3",
-    "@openshift-console/dynamic-plugin-sdk-webpack": "0.0.6",
+    "@openshift-console/dynamic-plugin-sdk": "0.0.11",
+    "@openshift-console/dynamic-plugin-sdk-internal": "0.0.10",
+    "@openshift-console/dynamic-plugin-sdk-webpack": "0.0.7",
+    "@openshift-console/plugin-shared": "^0.0.1",
     "@patternfly/react-core": "4.175.4",
     "@types/node": "^18.0.0",
     "@types/react": "^17.0.37",
@@ -28,6 +30,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.1.0",
     "eslint-plugin-react": "^7.30.1",
+    "js-yaml": "^4.1.0",
     "prettier": "^2.7.1",
     "prettier-stylelint": "^0.4.2",
     "react": "17.0.1",
@@ -48,12 +51,13 @@
     "webpack-dev-server": "^4.7.4"
   },
   "consolePlugin": {
-    "name": "console-plugin-template",
+    "name": "helm-plugin-demo",
     "version": "0.0.1",
-    "displayName": "OpenShift Console Plugin Template",
-    "description": "Template project for OpenShift console plugins. Edit package.json to change this message and the plugin name.",
+    "displayName": "Helm Plugin Demo",
+    "description": "A Demo plugin to showcase the benefits of a Dynamic Plugin for Helm within OpenShift",
     "exposedModules": {
-      "ExamplePage": "./components/ExamplePage"
+      "ExamplePage": "./components/ExamplePage",
+      "HelmPage": "./components/Helm/HelmPage"
     },
     "dependencies": {
       "@console/pluginAPI": "*"

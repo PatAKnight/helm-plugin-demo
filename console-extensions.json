@@ -16,5 +16,22 @@
       "perspective": "admin",
       "section": "home"
     }
+  },
+  {
+    "type": "console.page/route",
+    "properties": {
+      "path": "/helm-page",
+      "component": { "$codeRef": "HelmPage" }
+    }
+  },
+  {
+    "type": "console.navigation/href",
+    "properties": {
+      "id": "helm",
+      "name": "Helm Chart Repositories Page",
+      "href": "/helm-page",
+      "perspective": "admin",
+      "section": "home"
+    }
   }
 ]
