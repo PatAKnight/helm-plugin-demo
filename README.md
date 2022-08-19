@@ -46,11 +46,15 @@ systemctl reboot
 ```
 
 ## Navigating the Demo
-Navigating to <http://localhost:9000/helm-page> will allow you to see the Helm demo plugin being rendered. On this page, you can view all the available Helm Charts from the List Repositories API call alogn with their name, provider information, and version number. 
+Navigating to <http://localhost:9000/helm-page> will allow you to see the Helm demo plugin being rendered. On this page, you can view all the available Helm Charts from the List Repositories API call along with their name, provider information, and version number. 
+![HelmCard](imgs/HelmCard.png)
 
 Clicking on an individual Helm Chart Card will bring a panel from the right with more details. This will include a description, home page, and the maintainers of the specified Helm Chart.
+![HelmPanel](imgs/HelmPanel.png)
 
-You can also open the Console from <http://localhost:9000/> which will take you to the Overview page. From here ensure that you are in the Administrator perspective and click on the Home tab in the navigation bar. Here you will see the Helm Chart Repositories Page tab which will also navigate you to <http://localhost:9000/helm-page>.
+You can also open the Console from <http://localhost:9000/> which will take you to the Overview page. From here ensure that you are in the Administrator perspective and click on the Home tab in the navigation bar. Here you will see the Helm Chart Repositories Page tab which will also navigate you to <http://localhost:9000/helm-page>.   
+
+![Navigation](imgs/Navigation.png)
 
 ## References
 
