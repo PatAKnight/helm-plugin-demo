@@ -1,52 +1,21 @@
 # OpenShift Console Plugin Template
 
-This project is a minimal template for writing a new OpenShift Console dynamic
-plugin. It requires OpenShift 4.10.
+## Info 
 
-[Dynamic plugins](https://github.com/openshift/console/tree/master/frontend/packages/console-dynamic-plugin-sdk)
-allow you to extend the
-[OpenShift UI](https://github.com/openshift/console)
-at runtime, adding custom pages and other extensions. They are based on
-[webpack module federation](https://webpack.js.org/concepts/module-federation/).
-Plugins are registered with console using the `ConsolePlugin` custom resource
-and enabled in the console operator config by a cluster administrator.
+[Dynamic plugins](https://github.com/openshift/console/tree/master/frontend/packages/console-dynamic-plugin-sdk) are a way for teams to create UI components to ODC. With the use of Dynamic Plugins, a team could add custom pages, add perspectives and update navigation items, and add tabs and actions to resource pages. Dynamic Plugins are a [React](https://reactjs.org/) based UI that is built with [PatternFly 4](https://www.patternfly.org/v4/) components and extends the OpenShift Console using [webpack module federation](https://webpack.js.org/concepts/module-federation/). 
 
-[Node.js](https://nodejs.org/en/) and [yarn](https://yarnpkg.com) are required
-to build and run the example. To run OpenShift console in a container, either
-[Docker](https://www.docker.com) or [podman 3.2.0+](https://podman.io) and
-[oc](https://console.redhat.com/openshift/downloads) are required.
+This demo was created as a way to gain a better understanding of the capabilities that the ODC Dynamic Plugin has to offer. The goal of this demo is to demonstrate a call to the List Repositories API for Helm that will retrieve all the available Helm Charts. 
 
 ## Getting started
 
-After cloning this repo, you should update the plugin metadata such as the
-plugin name in the `consolePlugin` declaration of [package.json](package.json).
-
-```json
-"consolePlugin": {
-  "name": "my-plugin",
-  "version": "0.0.1",
-  "displayName": "My Plugin",
-  "description": "Enjoy this shiny, new console plugin!",
-  "exposedModules": {
-    "ExamplePage": "./components/ExamplePage"
-  },
-  "dependencies": {
-    "@console/pluginAPI": "*"
-  }
-}
-```
-
-The template adds a single example page in the Home navigation section. The
-extension is declared in the [console-extensions.json](console-extensions.json)
-file and the React component is declared in
-[src/components/ExamplePage.tsx](src/components/ExamplePage.tsx).
-
-You can run the plugin using a local development environment or build an image
-to deploy it to a cluster.
+* [oc](https://console.redhat.com/openshift/downloads) and an [Openshift cluster](https://console.redhat.com/openshift/create)
+* [Node.js](https://nodejs.org/en/) (16.16.0 used during development)
+* [yarn](https://yarnpkg.com) (1.22.17 used during development)
+* [Docker](https://www.docker.com) or [podman 3.2.0+](https://podman.io)
 
 ## Development
 
-### Option 1: Local
+### Local
 
 In one terminal window, run:
 
@@ -60,7 +29,7 @@ In another terminal window, run:
 
 This will run the OpenShift console in a container connected to the cluster
 you've logged into. The plugin HTTP server runs on port 9001 with CORS enabled.
-Navigate to <http://localhost:9000/example> to see the running plugin.
+Navigate to <http://localhost:9000/helm-page> to see the running plugin.
 
 #### Running start-console with Apple silicon and podman
 
@@ -76,93 +45,12 @@ rpm-ostree install qemu-user-static
 systemctl reboot
 ```
 
-### Option 2: Docker + VSCode Remote Container
+## Navigating the Demo
+Navigating to <http://localhost:9000/helm-page> will allow you to see the Helm demo plugin being rendered. On this page, you can view all the available Helm Charts from the List Repositories API call alogn with their name, provider information, and version number. 
 
-Make sure the
-[Remote Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
-extension is installed. This method uses Docker Compose where one container is
-the OpenShift console and the second container is the plugin. It requires that
-you have access to an existing OpenShift cluster. After the initial build, the
-cached containers will help you start developing in seconds.
+Clicking on an individual Helm Chart Card will bring a panel from the right with more details. This will include a description, home page, and the maintainers of the specified Helm Chart.
 
-1. Create a `dev.env` file inside the `.devcontainer` folder with the correct values for your cluster:
-
-```bash
-OC_PLUGIN_NAME=my-plugin
-OC_URL=https://api.example.com:6443
-OC_USER=kubeadmin
-OC_PASS=<password>
-```
-
-2. `(Ctrl+Shift+P) => Remote Containers: Open Folder in Container...`
-3. `yarn run start`
-4. Navigate to <http://localhost:9000/example>
-
-## Docker image
-
-Before you can deploy your plugin on a cluster, you must build an image and
-push it to an image registry.
-
-1. Build the image:
-   ```sh
-   docker build -t quay.io/my-repositroy/my-plugin:latest .
-   ```
-2. Run the image:
-   ```sh
-   docker run -it --rm -d -p 9001:80 quay.io/my-repository/my-plugin:latest
-   ```
-3. Push the image:
-   ```sh
-   docker push quay.io/my-repository/my-plugin:latest
-   ```
-
-NOTE: If you have a Mac with Apple silicon, you will need to add the flag
-`--platform=linux/amd64` when building the image to target the correct platform
-to run in-cluster.
-
-## Deployment on cluster
-
-After pushing an image with your changes to a registry, you can deploy the
-plugin to a cluster by instantiating the provided
-[OpenShift template](template.yaml). It will run a light-weight nginx HTTP
-server to serve your plugin's assets.
-
-```sh
-oc process -f template.yaml \
-  -p PLUGIN_NAME=my-plugin \
-  -p NAMESPACE=my-plugin-namespace \
-  -p IMAGE=quay.io/my-repository/my-plugin:latest \
-  | oc create -f -
-```
-
-`PLUGIN_NAME` must match the plugin name you used in the `consolePlugin`
-declaration of [package.json](package.json).
-
-Once deployed, patch the
-[Console operator](https://github.com/openshift/console-operator)
-config to enable the plugin.
-
-```sh
-oc patch consoles.operator.openshift.io cluster \
-  --patch '{ "spec": { "plugins": ["my-plugin"] } }' --type=merge
-```
-
-## Linting
-
-This project adds prettier, eslint, and stylelint. Linting can be run with
-`yarn run lint`.
-
-The stylelint config disallows hex colors since these cause problems with dark
-mode (starting in OpenShift console 4.11). You should use the
-[PatternFly global CSS variables](https://patternfly-react-main.surge.sh/developer-resources/global-css-variables#global-css-variables)
-for colors instead.
-
-The stylelint config also disallows naked element selectors like `table` and
-`.pf-` or `.co-` prefixed classes. This prevents plugins from accidentally
-overwriting default console styles, breaking the layout of existing pages. The
-best practice is to prefix your CSS classnames with your plugin name to avoid
-conflicts. Please don't disable these rules without understanding how they can
-break console styles!
+You can also open the Console from <http://localhost:9000/> which will take you to the Overview page. From here ensure that you are in the Administrator perspective and click on the Home tab in the navigation bar. Here you will see the Helm Chart Repositories Page tab which will also navigate you to <http://localhost:9000/helm-page>.
 
 ## References
 

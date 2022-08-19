@@ -1,7 +1,7 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: console-plugin-template
+  name: helm-plugin-demo
   annotations:
     openshift.io/display-name: OpenShift Console Plugin Template
     openshift.io/documentation-url: "https://github.com/spadgett/console-plugin-template"
@@ -13,15 +13,15 @@ metadata:
 parameters:
 - description: Name of your plugin. This name must match the name in the consolePlugin declaration in package.json.
   name: PLUGIN_NAME
-  value: console-plugin-template
+  value: helm-plugin-demo
   required: true
 - description: Namespace for your plugin. The namespace will be created by the template.
   name: NAMESPACE
-  value: console-plugin-template
+  value: helm-plugin-demo
   required: true
 - description: Container image of the plugin.
   name: IMAGE
-  value: quay.io/spadgett/console-plugin-template:latest
+  value: quay.io/rh_ee_pknight/helm-plugin-demo:latest
   required: true
 message: >-
   To enable the plugin on the cluster, run the following command:
